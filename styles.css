@@ -57,3 +57,7 @@ footer a{color:#fff;text-decoration:none}
    .plastic divs for <img class="card-photo">. See cards/README.md. */
 .card-photo{width:220px;height:auto;border-radius:12px;flex:0 0 220px;box-shadow:0 10px 22px rgba(16,32,51,.12);background:#eee}
 @media(max-width:700px){.card-photo{width:100%;max-width:280px}}
+h3{font-size:18px;letter-spacing:-.02em;margin:28px 0 8px}
+.page ul{margin:12px 0 12px 20px;padding:0}
+.page li{margin:0 0 8px;line-height:1.65}
+.page p{line-height:1.7}
