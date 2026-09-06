@@ -6,7 +6,8 @@
 cd "$(dirname "$0")" || exit 1
 BASE="https://creditcardspicks.com"
 fail=0
-note() { echo "  $1"; fail=1; }
+FAILFLAG=$(mktemp)
+note() { echo "  $1"; : > "$FAILFLAG.hit"; }
 
 pages() { find . -name '*.html' -not -path './.git/*'; }
 
@@ -25,7 +26,7 @@ for f in $(pages); do
       case "$t" in /*) p=".$t" ;; *) p="$dir/$t" ;; esac
       [ -e "$p" ] || echo "  broken link: ${f#./} -> $L"
     done
-done | sort -u | { grep . && fail=1; true; }
+done | sort -u | { grep . && : > "$FAILFLAG.hit"; true; }
 
 echo "3. CSS classes used in HTML but not defined in styles.css"
 for c in $(grep -ho 'class="[^"]*"' $(pages) | sed 's/class="//;s/"$//' | tr ' ' '\n' | sort -u); do
@@ -36,7 +37,7 @@ done
 echo "4. every canonical URL is in sitemap.xml"
 grep -ho 'rel="canonical" href="[^"]*"' $(pages) | sed 's/.*href="//;s/"$//' | sort -u \
   | while read -r u; do grep -qF "<loc>$u</loc>" sitemap.xml || echo "  not in sitemap: $u"; done \
-  | { grep . && fail=1; true; }
+  | { grep . && : > "$FAILFLAG.hit"; true; }
 
 echo "5. robots.txt points at the live domain"
 grep -q "Sitemap: $BASE/sitemap.xml" robots.txt || note "robots.txt sitemap URL is wrong"
@@ -47,9 +48,14 @@ if [ -f .vercelignore ]; then
     grep -lE "(src|href)=\"(\.\./)*$d/" $(pages) 2>/dev/null | while read -r f; do
       echo "  ${f#./} references $d/ but .vercelignore excludes it from deploys"
     done
-  done | { grep . && fail=1; true; }
+  done | { grep . && : > "$FAILFLAG.hit"; true; }
 fi
 
 echo
-[ "$fail" -eq 0 ] && echo "PASS - nothing to fix" || echo "FAIL - see above"
-exit $fail
+if [ -e "$FAILFLAG.hit" ]; then
+  echo "FAIL - see above"; rc=1
+else
+  echo "PASS - nothing to fix"; rc=0
+fi
+rm -f "$FAILFLAG" "$FAILFLAG.hit"
+exit $rc
