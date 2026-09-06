@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://cardpick-g-709b.vercel.app/sitemap.xml
+
+Sitemap: https://creditcardspicks.com/sitemap.xml
