@@ -3,6 +3,7 @@
 body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+.narrow{max-width:720px}
 header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
 .header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:68px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:750;letter-spacing:-.03em}
