@@ -1,4 +1,7 @@
 {
   "cleanUrls": false,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/comparar.html", "destination": "/es/comparar.html", "permanent": true }
+  ]
 }
