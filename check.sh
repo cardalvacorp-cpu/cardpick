@@ -21,7 +21,8 @@ for f in $(pages); do
   dir=$(dirname "$f")
   { grep -o 'href="[^"]*"' "$f"; grep -o 'src="[^"]*"' "$f"; } \
     | sed 's/^[a-z]*="//;s/"$//' | while read -r L; do
-      case "$L" in http*|mailto:*|data:*|\#*|"") continue ;; esac
+      # /_vercel/* is injected by the platform at request time, not shipped in the repo.
+      case "$L" in http*|mailto:*|data:*|\#*|/_vercel/*|"") continue ;; esac
       t="${L%%#*}"; [ -z "$t" ] && continue
       case "$t" in /*) p=".$t" ;; *) p="$dir/$t" ;; esac
       [ -e "$p" ] || echo "  broken link: ${f#./} -> $L"
